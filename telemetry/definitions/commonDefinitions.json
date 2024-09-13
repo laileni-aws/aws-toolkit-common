@@ -1,6 +1,11 @@
 {
     "types": [
         {
+            "name": "action",
+            "type": "string",
+            "description": "Name of an action that was taken, displayed, etc."
+        },
+        {
             "name": "amazonqCodeGenerationResult",
             "type": "string",
             "description": "Captures if code generation result is Complete, Failed, etc."
@@ -158,7 +163,18 @@
             "description": "AWS Region associated with a metric\n- \"n/a\" if not associated with a region.\n- \"not-set\" if metric is associated with a region, but region is unknown."
         },
         {
+            "name": "buildDuration",
+            "type": "int",
+            "description": "The amount of time required for the build to complete (in seconds)."
+        },
+        {
+            "name": "buildSystemVersion",
+            "type": "string",
+            "description": "The build system version on the user's machine"
+        },
+        {
             "name": "causedBy",
+            "type": "string",
             "allowedValues": [
                 "user",
                 "service",
@@ -184,6 +200,7 @@
         },
         {
             "name": "cloudWatchLogsPresentation",
+            "type": "string",
             "allowedValues": [
                 "ui",
                 "text"
@@ -192,6 +209,7 @@
         },
         {
             "name": "cloudWatchResourceType",
+            "type": "string",
             "allowedValues": [
                 "logGroup",
                 "logGroupList",
@@ -234,23 +252,36 @@
             "description": "Time taken to invoke code scan service APIs in milliseconds"
         },
         {
-            "name": "codeTransformApiErrorMessage",
+            "name": "codeTransformArtifactType",
             "type": "string",
-            "description": "Any API-specific errors"
+            "description": "Type of transform artifact",
+            "allowedValues": [
+                "ClientInstructions",
+                "Logs"
+            ]
         },
         {
-            "name": "codeTransformApiNames",
+            "name": "codeTransformBuildCommand",
             "type": "string",
-            "description": "Names of allowed API calls",
+            "description": "Type of build command",
             "allowedValues": [
-                "ResumeTransformation",
-                "StartTransformation",
-                "StopTransformation",
-                "GetTransformation",
-                "GetTransformationPlan",
-                "UploadZip",
-                "CreateUploadUrl",
-                "ExportResultArchive"
+                "mvnw.cmd",
+                "mvnw",
+                "mvn",
+                "IDEBundledMaven",
+                "gradlew.bat",
+                "gradlew",
+                "gradle",
+                "IDEBundledGradle"
+            ]
+        },
+        {
+            "name": "codeTransformBuildSystem",
+            "type": "string",
+            "description": "Type of build system",
+            "allowedValues": [
+                "Maven",
+                "Gradle"
             ]
         },
         {
@@ -263,6 +294,11 @@
                 "devToolsStopButton",
                 "bottomPanelSideNavButton"
             ]
+        },
+        {
+            "name": "codeTransformDependenciesCopied",
+            "type": "boolean",
+            "description": "If dependencies are copied into upload artifact."
         },
         {
             "name": "codeTransformJavaSourceVersionsAllowed",
@@ -293,25 +329,29 @@
             "description": "The Java version on the user's machine"
         },
         {
-            "name": "codeTransformLocalMavenVersion",
-            "type": "string",
-            "description": "The Maven version on the user's machine"
-        },
-        {
-            "name": "codeTransformMavenBuildCommand",
-            "type": "string",
-            "description": "Type of maven command",
-            "allowedValues": [
-                "mvnw.cmd",
-                "mvnw",
-                "mvn",
-                "IDEBundledMaven"
-            ]
-        },
-        {
             "name": "codeTransformMetadata",
             "type": "string",
             "description": "A general field for logging metadata associated to Amazon Q transform metrics."
+        },
+        {
+            "name": "codeTransformNumberOfProjects",
+            "type": "int",
+            "description": "The number of projects selected for transformation"
+        },
+        {
+            "name": "codeTransformNumberOfTransformedFiles",
+            "type": "int",
+            "description": "The number of files that were transformed during a transformation job"
+        },
+        {
+            "name": "codeTransformNumberOfTransformedFilesAccepted",
+            "type": "int",
+            "description": "The number of transformed files that have been accepted by the user"
+        },
+        {
+            "name": "codeTransformNumberOfTransformedUnitsAccepted",
+            "type": "int",
+            "description": "The number of transformed buildable units that have been accepted by the user"
         },
         {
             "name": "codeTransformPatchViewerCancelSrcComponents",
@@ -323,6 +363,11 @@
             ]
         },
         {
+            "name": "codeTransformPlanReceivedCount",
+            "type": "int",
+            "description": "The number of times the transformation plan was received during transformation"
+        },
+        {
             "name": "codeTransformPreValidationError",
             "type": "string",
             "description": "Names of the pre-validation errors that can occur",
@@ -331,8 +376,8 @@
                 "NoJavaProject",
                 "MixedLanguages",
                 "UnsupportedJavaVersion",
-                "ProjectJDKDiffersFromMavenJDK",
-                "NonMavenProject",
+                "ProjectJDKDiffersFromBuildSystemJDK",
+                "UnsupportedBuildSystem",
                 "EmptyProject",
                 "NonSsoLogin",
                 "RemoteRunProject"
@@ -389,6 +434,11 @@
             "description": "The current transformation job's status"
         },
         {
+            "name": "codeTransformTarget",
+            "type": "string",
+            "description": "The target solution or project(s) selected for transformation"
+        },
+        {
             "name": "codeTransformTotalByteSize",
             "type": "int",
             "description": "The byte size of the upload or download."
@@ -403,6 +453,7 @@
             "type": "string",
             "description": "Names of components that can initiate the diff viewer",
             "allowedValues": [
+                "chat",
                 "toastNotification",
                 "treeView",
                 "treeViewHeader"
@@ -411,7 +462,7 @@
         {
             "name": "codewhispererAcceptedTokens",
             "type": "int",
-            "description": "The metrics accepted on suggested CodeWhisperer code"
+            "description": "The number of tokens that are accepted and not modified by the user"
         },
         {
             "name": "codewhispererAllCompletionsLatency",
@@ -434,7 +485,12 @@
         {
             "name": "codewhispererCharactersAccepted",
             "type": "int",
-            "description": "The number of characters user has accepted through partial acceptance."
+            "description": "The number of characters user has accepted through inline completion service"
+        },
+        {
+            "name": "codewhispererCharactersModified",
+            "type": "int",
+            "description": "number of characters modified by users within the accepted inline suggestion"
         },
         {
             "name": "codewhispererCharactersRecommended",
@@ -576,30 +632,30 @@
             "type": "string",
             "description": "Programming language of the CodeWhisperer recommendation",
             "allowedValues": [
-                "java",
-                "python",
-                "javascript",
-                "plaintext",
-                "jsx",
-                "typescript",
-                "tsx",
-                "csharp",
                 "c",
                 "cpp",
+                "csharp",
                 "go",
+                "hcl",
+                "java",
+                "javascript",
+                "json",
+                "jsonc",
+                "jsx",
                 "kotlin",
                 "php",
+                "plaintext",                
+                "python",
                 "ruby",
                 "rust",
                 "scala",
                 "shell",
                 "sql",
-                "json",
-                "jsonc",
+                "tf",
+                "tsx",
+                "typescript",
                 "yaml",
-                "yml",
-                "hcl",
-                "tf"
+                "yml"
             ]
         },
         {
@@ -681,6 +737,11 @@
             "name": "codewhispererSessionId",
             "type": "string",
             "description": "The unique identifier for a CodeWhisperer session(which can contain multiple requests)"
+        },
+        {
+            "name": "codewhispererSuggestedTokens",
+            "type": "int",
+            "description": "The number of tokens in the original code suggestions"
         },
         {
             "name": "codewhispererSuggestionCount",
@@ -797,6 +858,7 @@
         },
         {
             "name": "component",
+            "type": "string",
             "allowedValues": [
                 "editor",
                 "viewer",
@@ -807,12 +869,17 @@
                 "webview",
                 "quickfix"
             ],
-            "description": "The IDE or OS component used for the action. (Examples: S3 download to filesystem, S3 upload from editor, ...)"
+            "description": "The IDE or OS component used for the action. (Examples: S3 download to filesystem, S3 upload from editor, ...).  See also `featureId` for specific feature names, `module` for low-level modules, and `resourceType`."
         },
         {
             "name": "contextTruncationDuration",
             "type": "int",
             "description": "Time taken for context truncation in milliseconds"
+        },
+        {
+            "name": "count",
+            "type": "int",
+            "description": "Number of occurrences a metric, or some other metric-defined count."
         },
         {
             "name": "credentialModification",
@@ -939,9 +1006,24 @@
             "description": "If the action was run in debug mode or not"
         },
         {
+            "name": "destFacetType",
+            "type": "string",
+            "description": "Resource subtype of connection end"
+        },
+        {
+            "name": "destResourceType",
+            "type": "string",
+            "description": "CloudFormation resource type of connection end"
+        },
+        {
             "name": "detectorId",
             "type": "string",
             "description": "The id of the detector which produced the code scan issue"
+        },
+        {
+            "name": "didSave",
+            "type": "boolean",
+            "description": "Whether the user saved"
         },
         {
             "name": "documentType",
@@ -960,6 +1042,7 @@
         },
         {
             "name": "dynamicResourceOperation",
+            "type": "string",
             "allowedValues": [
                 "Create",
                 "Update",
@@ -969,6 +1052,7 @@
         },
         {
             "name": "dynamoDbFetchType",
+            "type": "string",
             "allowedValues": [
                 "scan",
                 "query"
@@ -977,6 +1061,7 @@
         },
         {
             "name": "dynamoDbIndexType",
+            "type": "string",
             "allowedValues": [
                 "primary",
                 "localSecondary",
@@ -986,6 +1071,7 @@
         },
         {
             "name": "dynamoDbTarget",
+            "type": "string",
             "allowedValues": [
                 "table",
                 "tableProperties",
@@ -995,15 +1081,18 @@
         },
         {
             "name": "ec2ConnectionType",
+            "type": "string",
             "allowedValues": [
                 "remoteDesktop",
                 "ssh",
-                "scp"
+                "scp",
+                "ssm"
             ],
             "description": "Ways to connect to an EC2 Instance"
         },
         {
             "name": "ec2InstanceState",
+            "type": "string",
             "allowedValues": [
                 "start",
                 "stop",
@@ -1014,6 +1103,7 @@
         },
         {
             "name": "ecrDeploySource",
+            "type": "string",
             "allowedValues": [
                 "dockerfile",
                 "tag"
@@ -1022,6 +1112,7 @@
         },
         {
             "name": "ecsExecuteCommandType",
+            "type": "string",
             "allowedValues": [
                 "command",
                 "shell"
@@ -1030,6 +1121,7 @@
         },
         {
             "name": "ecsLaunchType",
+            "type": "string",
             "allowedValues": [
                 "ec2",
                 "fargate"
@@ -1088,12 +1180,24 @@
         {
             "name": "featureId",
             "type": "string",
-            "description": "The id of the feature the user is interacting in.",
+            "description": "The id of the feature the user is interacting in. See also: `component`, `featureId`, `module`, `resourceType`.",
             "allowedValues": [
+                "amazonQ",
                 "awsExplorer",
+                "awsToolkit",
                 "codewhisperer",
                 "codecatalyst"
             ]
+        },
+        {
+            "name": "featureValue",
+            "type": "string",
+            "description": "Additional Data Value for AB Testing"
+        },
+        {
+            "name": "featureVariation",
+            "type": "string",
+            "description": "Feature Variant for AB Testing"
         },
         {
             "name": "filenameExt",
@@ -1111,9 +1215,27 @@
             "description": "Number of findings discovered after executing IAM Policy Checks"
         },
         {
+            "name": "fps",
+            "type": "int",
+            "description": "Average frames per second"
+        },
+        {
             "name": "framework",
             "type": "string",
             "description": "Application framework being used"
+        },
+        {
+            "name": "generateFailure",
+            "type": "string",
+            "allowedValues": [
+                "Parse"
+            ],
+            "description": "Type of generation failure"
+        },
+        {
+            "name": "hasChatAuth",
+            "type": "boolean",
+            "description": "Whether the user has access to CodeWhisperer Chat"
         },
         {
             "name": "hasTextFilter",
@@ -1137,6 +1259,7 @@
         },
         {
             "name": "iamResourceType",
+            "type": "string",
             "allowedValues": [
                 "group",
                 "role",
@@ -1147,7 +1270,7 @@
         {
             "name": "id",
             "type": "string",
-            "description": "A generic ID metadata"
+            "description": "Metric-defined identifier"
         },
         {
             "name": "includesFix",
@@ -1158,6 +1281,11 @@
             "name": "initialDeploy",
             "type": "boolean",
             "description": "Whether or not the deploy targets a new destination (true) or an existing destination (false)"
+        },
+        {
+            "name": "initializeTime",
+            "type": "int",
+            "description": "Time from starting the feature until ready-to-use."
         },
         {
             "name": "inputPolicyType",
@@ -1171,6 +1299,7 @@
         },
         {
             "name": "insightsDialogOpenSource",
+            "type": "string",
             "allowedValues": [
                 "explorer",
                 "resultsWindow",
@@ -1180,6 +1309,7 @@
         },
         {
             "name": "insightsQueryStringType",
+            "type": "string",
             "allowedValues": [
                 "insights",
                 "searchTerm"
@@ -1188,6 +1318,7 @@
         },
         {
             "name": "insightsQueryTimeType",
+            "type": "string",
             "allowedValues": [
                 "relative",
                 "absolute"
@@ -1216,6 +1347,7 @@
         },
         {
             "name": "lambdaArchitecture",
+            "type": "string",
             "allowedValues": [
                 "x86_64",
                 "arm64"
@@ -1224,6 +1356,7 @@
         },
         {
             "name": "lambdaPackageType",
+            "type": "string",
             "allowedValues": [
                 "Zip",
                 "Image"
@@ -1236,9 +1369,19 @@
             "description": "Language used for the project."
         },
         {
+            "name": "loadFileTime",
+            "type": "int",
+            "description": "Time from opening Composer to loading the file"
+        },
+        {
             "name": "locale",
             "type": "string",
             "description": "User locale. Examples: en-US, en-GB, etc."
+        },
+        {
+            "name": "module",
+            "type": "string",
+            "description": "Free-form module name for both high-level features such as \"PublishToAWS\", and lower-level modules such as \"ToolkitContextProvider\". Use `component` for UI components, or `featureId` for specific feature names. See also `resourceType`."
         },
         {
             "name": "name",
@@ -1256,6 +1399,11 @@
             "description": "Comma delimited list of NEW enabled auth connections"
         },
         {
+            "name": "numAttempts",
+            "type": "int",
+            "description": "Number of generations before the user accepted or rejected"
+        },
+        {
             "name": "oldVersion",
             "type": "string",
             "description": "The old version of something. Useful when updating dependent resources."
@@ -1264,6 +1412,11 @@
             "name": "partitionId",
             "type": "string",
             "description": "The ID of the partition that was selected"
+        },
+        {
+            "name": "pathsScrubbed",
+            "type": "int",
+            "description": "Number of generation paths modified"
         },
         {
             "name": "platform",
@@ -1311,12 +1464,18 @@
             "description": "Per-request service identifier. Unlike `serviceType` (which describes the originator of the request), this describes the request itself."
         },
         {
+            "name": "resourceCounts",
+            "type": "string",
+            "description": "Per-resource count of each resource in a container"
+        },
+        {
             "name": "resourceType",
             "type": "string",
-            "description": "The dynamic resource type being interacted with"
+            "description": "The dynamic resource type being interacted with. See also `component` for UI components, `featureId` for specific feature names, or `module` for low-level modules."
         },
         {
             "name": "result",
+            "type": "string",
             "allowedValues": [
                 "Succeeded",
                 "Failed",
@@ -1370,6 +1529,20 @@
             "description": "A free-text field to record runtimes that may be separate from Lambda runtimes"
         },
         {
+            "name": "saveFileTime",
+            "type": "int",
+            "description": "Time from opening the feature until file saved."
+        },
+        {
+            "name": "saveType",
+            "type": "string",
+            "allowedValues": [
+                "MANUAL_SAVE",
+                "AUTO_SAVE"
+            ],
+            "description": "Type of save executed"
+        },
+        {
             "name": "schemaLanguage",
             "type": "string",
             "allowedValues": [
@@ -1405,12 +1578,33 @@
             "description": "The source of the operation"
         },
         {
+            "name": "sourceFacetType",
+            "type": "string",
+            "description": "Resource subtype of connection start"
+        },
+        {
+            "name": "sourceResourceType",
+            "type": "string",
+            "description": "CloudFormation resource type of connection start"
+        },
+        {
             "name": "sqsQueueType",
+            "type": "string",
             "allowedValues": [
                 "standard",
                 "fifo"
             ],
             "description": "The type of an SQS Queue"
+        },
+        {
+            "name": "ssoRegistrationClientId",
+            "type": "string",
+            "description": "The client ID of an SSO registration."
+        },
+        {
+            "name": "ssoRegistrationExpiresAt",
+            "type": "string",
+            "description": "Date/time that an SSO client registration expires."
         },
         {
             "name": "successCount",
@@ -1440,8 +1634,14 @@
                 "dotnet-lambda-deploy",
                 "dotnet-deploy-cli",
                 "aws-cli",
-                "sam-cli"
+                "sam-cli",
+                "docker"
             ]
+        },
+        {
+            "name": "totalResourceCount",
+            "type": "int",
+            "description": "Total count of all resources in a container"
         },
         {
             "name": "update",
@@ -1605,6 +1805,18 @@
                 {
                     "type": "credentialStartUrl",
                     "required": false
+                }
+            ]
+        },
+        {
+            "name": "amazonq_bundleExtensionIgnored",
+            "description": "File extension was ignored 'count' many times during bundling process",
+            "metadata": [
+                {
+                    "type": "count"
+                },
+                {
+                    "type": "filenameExt"
                 }
             ]
         },
@@ -1981,6 +2193,237 @@
             ]
         },
         {
+            "name": "appBuilder_installTool",
+            "description": "Click Install button in Getting Started Walkthrough",
+            "metadata": [
+                {
+                    "type": "source",
+                    "required": false
+                },
+                {
+                    "type": "toolId",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appBuilder_openLocalInvokeWebView",
+            "description": "Click open Local invoke WebView button in Application Builder",
+            "metadata": [
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appBuilder_openRemoteInvokeWebView",
+            "description": "Click open Remote invoke WebView button in Application Builder",
+            "metadata": [
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appBuilder_openTemplate",
+            "description": "Click open template button in Application Builder",
+            "metadata": [
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appBuilder_selectWalkthroughTemplate",
+            "description": "Select a template and create project in Getting Started Walkthrough",
+            "metadata": [
+                {
+                    "type": "action",
+                    "required": false
+                },
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appBuilder_startWalkthrough",
+            "description": "Open Getting Started Walkthrough",
+            "metadata": [
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_addConnection",
+            "description": "Called when two resources are connected",
+            "metadata": [
+                {
+                    "type": "destFacetType"
+                },
+                {
+                    "type": "destResourceType"
+                },
+                {
+                    "type": "sourceFacetType"
+                },
+                {
+                    "type": "sourceResourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_addResource",
+            "description": "Called when a resource is added to the canvas",
+            "metadata": [
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_closeWfs",
+            "description": "Called when Step Functions Workflow Studio is closed",
+            "metadata": [
+                {
+                    "type": "didSave"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_customerReady",
+            "description": "Called after a customer loads into Composeer",
+            "metadata": [
+                {
+                    "type": "initializeTime"
+                },
+                {
+                    "type": "loadFileTime"
+                },
+                {
+                    "type": "saveFileTime"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_deployClicked",
+            "description": "Called after clicking the Sync button"
+        },
+        {
+            "name": "appcomposer_deployCompleted",
+            "description": "Called after a Composer-triggered SAM Sync completes"
+        },
+        {
+            "name": "appcomposer_fps",
+            "description": "Called regularly to record app performance",
+            "metadata": [
+                {
+                    "type": "fps"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_generateAccepted",
+            "description": "Called after accepting a generative AI suggestion",
+            "metadata": [
+                {
+                    "type": "numAttempts"
+                },
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_generateClicked",
+            "description": "Called after generating a standard resource template partial",
+            "metadata": [
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_generateRejected",
+            "description": "Called after rejecting a generative AI suggestion",
+            "metadata": [
+                {
+                    "type": "numAttempts"
+                },
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_initializeProject",
+            "description": "Called when a project successfully loads",
+            "metadata": [
+                {
+                    "type": "resourceCounts"
+                },
+                {
+                    "type": "totalResourceCount"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_invalidGeneration",
+            "description": "Called after a generate failed",
+            "metadata": [
+                {
+                    "type": "generateFailure"
+                },
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_openTemplate",
+            "description": "Called after opening a template",
+            "metadata": [
+                {
+                    "type": "hasChatAuth"
+                },
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_openWfs",
+            "description": "Called when Step Functions Workflow Studio is opened"
+        },
+        {
+            "name": "appcomposer_postProcess",
+            "description": "Called after a generate is processed",
+            "metadata": [
+                {
+                    "type": "pathsScrubbed"
+                },
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
+            "name": "appcomposer_regenerateClicked",
+            "description": "Called after regenerating a standard resource template partial",
+            "metadata": [
+                {
+                    "type": "resourceType"
+                }
+            ]
+        },
+        {
             "name": "apprunner_copyServiceUrl",
             "description": "Copy the service URL"
         },
@@ -2054,7 +2497,7 @@
         },
         {
             "name": "auth_addConnection",
-            "description": "Captures the result of adding a new connection in the 'Add New Connection' workflow",
+            "description": "New connection was added in the 'Add New Connection' workflow.",
             "metadata": [
                 {
                     "type": "attempts",
@@ -2097,6 +2540,14 @@
                 },
                 {
                     "type": "source"
+                },
+                {
+                    "type": "ssoRegistrationClientId",
+                    "required": false
+                },
+                {
+                    "type": "ssoRegistrationExpiresAt",
+                    "required": false
                 }
             ]
         },
@@ -2172,8 +2623,20 @@
                     "required": true
                 },
                 {
+                    "type": "credentialStartUrl",
+                    "required": false
+                },
+                {
                     "type": "source",
                     "required": true
+                },
+                {
+                    "type": "ssoRegistrationClientId",
+                    "required": false
+                },
+                {
+                    "type": "ssoRegistrationExpiresAt",
+                    "required": false
                 }
             ],
             "passive": true
@@ -2225,6 +2688,26 @@
             ]
         },
         {
+            "name": "aws_extensionUninstalled",
+            "description": "An extension in uninstalled",
+            "metadata": []
+        },
+        {
+            "name": "aws_featureConfig",
+            "description": "AB Testing Feature response and Cohort Assignments",
+            "metadata": [
+                {
+                    "type": "featureValue"
+                },
+                {
+                    "type": "featureVariation"
+                },
+                {
+                    "type": "id"
+                }
+            ]
+        },
+        {
             "name": "aws_help",
             "description": "Open docs for the extension",
             "metadata": [
@@ -2270,7 +2753,7 @@
         },
         {
             "name": "aws_loginWithBrowser",
-            "description": "Called when a connection requires login using the browser",
+            "description": "Extension navigated the user to a web browser to perform/complete the login process.",
             "metadata": [
                 {
                     "type": "credentialSourceId",
@@ -2297,6 +2780,14 @@
                 },
                 {
                     "type": "source"
+                },
+                {
+                    "type": "ssoRegistrationClientId",
+                    "required": false
+                },
+                {
+                    "type": "ssoRegistrationExpiresAt",
+                    "required": false
                 }
             ]
         },
@@ -2368,6 +2859,10 @@
                     "required": false
                 },
                 {
+                    "type": "credentialStartUrl",
+                    "required": false
+                },
+                {
                     "type": "credentialType",
                     "required": false
                 },
@@ -2388,6 +2883,14 @@
                 },
                 {
                     "type": "sessionDuration",
+                    "required": false
+                },
+                {
+                    "type": "ssoRegistrationClientId",
+                    "required": false
+                },
+                {
+                    "type": "ssoRegistrationExpiresAt",
                     "required": false
                 }
             ]
@@ -3139,11 +3642,57 @@
             "passive": true
         },
         {
-            "name": "codeTransform_dependenciesCopied",
-            "description": "The repo copies over at least one dependency successfully.",
+            "name": "codeTransform_applyChanges",
+            "description": "Apply suggested changes to buildable units.",
             "metadata": [
                 {
+                    "type": "codeTransformNumberOfTransformedFilesAccepted",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformNumberOfTransformedUnitsAccepted",
+                    "required": false
+                },
+                {
                     "type": "codeTransformSessionId",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "codeTransform_downloadArtifact",
+            "description": "User downloads code transform artifact",
+            "metadata": [
+                {
+                    "type": "codeTransformArtifactType",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformJobId",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformRuntimeError",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformRunTimeLatency",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformSessionId",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformTotalByteSize",
+                    "required": true
+                },
+                {
+                    "type": "reason",
+                    "required": false
+                },
+                {
+                    "type": "result",
                     "required": true
                 }
             ]
@@ -3175,71 +3724,23 @@
             ]
         },
         {
-            "name": "codeTransform_isDoubleClickedToTriggerInvalidProject",
-            "description": "The code transform button in the devtools to initiate the job but there is a validation error.",
+            "name": "codeTransform_initiateTransform",
+            "description": "User initiates code transform from Q Chat Prompt.",
             "metadata": [
-                {
-                    "type": "codeTransformPreValidationError",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformRuntimeError",
-                    "required": false
-                },
                 {
                     "type": "codeTransformSessionId",
                     "required": true
+                },
+                {
+                    "type": "credentialSourceId",
+                    "required": false
                 },
                 {
                     "type": "reason",
-                    "required": true
-                },
-                {
-                    "type": "result",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_jobArtifactDownloadAndDeserializeTime",
-            "description": "A timestamp for when the job is ending download zip contents",
-            "metadata": [
-                {
-                    "type": "codeTransformJobId",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformRuntimeError",
                     "required": false
                 },
                 {
-                    "type": "codeTransformRunTimeLatency",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformSessionId",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformTotalByteSize",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_jobCreateZipEndTime",
-            "description": "A timestamp for when the job is ending upload zip contents",
-            "metadata": [
-                {
-                    "type": "codeTransformRunTimeLatency",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformSessionId",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformTotalByteSize",
+                    "type": "result",
                     "required": true
                 }
             ]
@@ -3300,7 +3801,7 @@
         },
         {
             "name": "codeTransform_jobIsStartedFromChatPrompt",
-            "description": "The user initiates a transform job from Amazon Q chat prompt.",
+            "description": "The user initiates a transform job from the Amazon Q chat prompt.",
             "metadata": [
                 {
                     "type": "codeTransformSessionId",
@@ -3313,25 +3814,48 @@
             ]
         },
         {
-            "name": "codeTransform_jobStartedCompleteFromPopupDialog",
-            "passive": true,
-            "description": "After modal validation of inputs, code execution will start and we will fire this event.",
+            "name": "codeTransform_jobStart",
+            "description": "Transform job started for uploaded project.",
             "metadata": [
                 {
-                    "type": "codeTransformJavaSourceVersionsAllowed",
-                    "required": true
+                    "type": "codeTransformJobId",
+                    "required": false
                 },
                 {
-                    "type": "codeTransformJavaTargetVersionsAllowed",
-                    "required": true
+                    "type": "codeTransformNumberOfProjects",
+                    "required": false
                 },
                 {
-                    "type": "codeTransformProjectId",
-                    "required": true
+                    "type": "codeTransformNumberOfTransformedFiles",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformRunTimeLatency",
+                    "required": false
                 },
                 {
                     "type": "codeTransformSessionId",
                     "required": true
+                },
+                {
+                    "type": "codeTransformTarget",
+                    "required": false
+                },
+                {
+                    "type": "credentialSourceId",
+                    "required": false
+                },
+                {
+                    "type": "reason",
+                    "required": false
+                },
+                {
+                    "type": "result",
+                    "required": false
+                },
+                {
+                    "type": "source",
+                    "required": false
                 }
             ]
         },
@@ -3359,24 +3883,34 @@
             ]
         },
         {
-            "name": "codeTransform_logApiError",
-            "passive": true,
-            "description": "A general logging measure for all client side API errors.",
+            "name": "codeTransform_localBuildProject",
+            "description": "Transform initiates local build.",
             "metadata": [
                 {
-                    "type": "codeTransformApiErrorMessage",
+                    "type": "codeTransformBuildCommand",
                     "required": true
                 },
                 {
-                    "type": "codeTransformApiNames",
+                    "type": "codeTransformSessionId",
                     "required": true
                 },
                 {
-                    "type": "codeTransformJobId",
+                    "type": "reason",
                     "required": false
                 },
                 {
-                    "type": "codeTransformRequestId",
+                    "type": "result",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "codeTransform_logGeneralError",
+            "passive": true,
+            "description": "A general error has occurred.",
+            "metadata": [
+                {
+                    "type": "codeTransformJobId",
                     "required": false
                 },
                 {
@@ -3384,27 +3918,87 @@
                     "required": true
                 },
                 {
-                    "type": "codeTransformTotalByteSize",
+                    "type": "reason",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "codeTransform_submitSelection",
+            "description": "User provides input to project module and language selection.",
+            "metadata": [
+                {
+                    "type": "codeTransformJavaSourceVersionsAllowed",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformJavaTargetVersionsAllowed",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformProjectId",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformSessionId",
+                    "required": true
+                },
+                {
+                    "type": "reason",
+                    "required": false
+                },
+                {
+                    "type": "result",
+                    "required": true
+                },
+                {
+                    "type": "userChoice",
                     "required": false
                 }
             ]
         },
         {
-            "name": "codeTransform_logApiLatency",
+            "name": "codeTransform_totalRunTime",
             "passive": true,
-            "description": "A general logging measure for all client side API's latency.",
+            "description": "We want to log the total run time in the users experience for the IDE. The total runtime should end when all API's have finished running and the users is prompted for next step actions.",
             "metadata": [
                 {
-                    "type": "codeTransformApiNames",
-                    "required": true
+                    "type": "buildSystemVersion",
+                    "required": false
                 },
                 {
                     "type": "codeTransformJobId",
                     "required": false
                 },
                 {
-                    "type": "codeTransformRequestId",
+                    "type": "codeTransformLocalJavaVersion",
                     "required": false
+                },
+                {
+                    "type": "codeTransformPlanReceivedCount",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformResultStatusMessage",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformRunTimeLatency",
+                    "required": true
+                },
+                {
+                    "type": "codeTransformSessionId",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "codeTransform_uploadProject",
+            "description": "Transform initiates project artifact upload.",
+            "metadata": [
+                {
+                    "type": "codeTransformDependenciesCopied",
+                    "required": true
                 },
                 {
                     "type": "codeTransformRunTimeLatency",
@@ -3416,56 +4010,30 @@
                 },
                 {
                     "type": "codeTransformTotalByteSize",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformUploadId",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_logGeneralError",
-            "passive": true,
-            "description": "A general logging measure for all client side API errors.",
-            "metadata": [
-                {
-                    "type": "codeTransformApiErrorMessage",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformJobId",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformSessionId",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_mvnBuildFailed",
-            "description": "The maven command build failed.",
-            "metadata": [
-                {
-                    "type": "codeTransformMavenBuildCommand",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformSessionId",
                     "required": true
                 },
                 {
                     "type": "reason",
                     "required": false
+                },
+                {
+                    "type": "result",
+                    "required": true
                 }
             ]
         },
         {
-            "name": "codeTransform_projectDetails",
-            "passive": true,
-            "description": "Transform initiates project validation before user interaction and we want to gather project details then.",
+            "name": "codeTransform_validateProject",
+            "description": "Transform initiates project language, build tool, and build file validation.",
             "metadata": [
+                {
+                    "type": "buildSystemVersion",
+                    "required": false
+                },
+                {
+                    "type": "codeTransformBuildSystem",
+                    "required": false
+                },
                 {
                     "type": "codeTransformLocalJavaVersion",
                     "required": false
@@ -3489,65 +4057,16 @@
             ]
         },
         {
-            "name": "codeTransform_totalRunTime",
-            "passive": true,
-            "description": "We want to log the total run time in the users experience for the IDE. The total runtime should end when all API's have finished running and the users is prompted for next step actions.",
+            "name": "codeTransform_viewArtifact",
+            "description": "User clicks to view downloaded artifact.",
             "metadata": [
                 {
-                    "type": "codeTransformJobId",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformLocalJavaVersion",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformLocalMavenVersion",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformResultStatusMessage",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformRunTimeLatency",
+                    "type": "codeTransformArtifactType",
                     "required": true
                 },
-                {
-                    "type": "codeTransformSessionId",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_vcsDiffViewerVisible",
-            "description": "A timestamp for when the diff view is being displayed to the user.",
-            "metadata": [
                 {
                     "type": "codeTransformJobId",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformSessionId",
                     "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_vcsViewerCanceled",
-            "description": "An interactivity measured when users cancel a patch view.",
-            "metadata": [
-                {
-                    "type": "codeTransformJobId",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformPatchViewerCancelSrcComponents",
-                    "required": true
-                },
-                {
-                    "type": "codeTransformRuntimeError",
-                    "required": false
                 },
                 {
                     "type": "codeTransformSessionId",
@@ -3555,43 +4074,23 @@
                 },
                 {
                     "type": "codeTransformStatus",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_vcsViewerClicked",
-            "description": "An interactivity measured when users click to view diff results.",
-            "metadata": [
-                {
-                    "type": "codeTransformJobId",
-                    "required": false
-                },
-                {
-                    "type": "codeTransformSessionId",
                     "required": true
                 },
                 {
                     "type": "codeTransformVCSViewerSrcComponents",
                     "required": true
-                }
-            ]
-        },
-        {
-            "name": "codeTransform_vcsViewerSubmitted",
-            "description": "An interactivity measured when users submit their patch view results.",
-            "metadata": [
+                },
                 {
-                    "type": "codeTransformJobId",
+                    "type": "reason",
                     "required": false
                 },
                 {
-                    "type": "codeTransformSessionId",
+                    "type": "result",
                     "required": true
                 },
                 {
-                    "type": "codeTransformStatus",
-                    "required": true
+                    "type": "userChoice",
+                    "required": false
                 }
             ]
         },
@@ -3688,6 +4187,10 @@
                 },
                 {
                     "type": "codewhispererPercentage"
+                },
+                {
+                    "type": "codewhispererSuggestedTokens",
+                    "required": false
                 },
                 {
                     "type": "codewhispererTotalTokens"
@@ -4091,6 +4594,12 @@
             "description": "Percentage of user modifications for the selected suggestion until a fixed period of time",
             "metadata": [
                 {
+                    "type": "codewhispererCharactersAccepted"
+                },
+                {
+                    "type": "codewhispererCharactersModified"
+                },
+                {
                     "type": "codewhispererCompletionType"
                 },
                 {
@@ -4346,6 +4855,19 @@
             ]
         },
         {
+            "name": "dynamodb_deleteRecord",
+            "description": "Deletes a record in DynamoDB record",
+            "metadata": [
+                {
+                    "type": "reason",
+                    "required": false
+                },
+                {
+                    "type": "result"
+                }
+            ]
+        },
+        {
             "name": "dynamodb_deleteTable",
             "description": "Delete a DynamoDB table",
             "metadata": [
@@ -4379,6 +4901,10 @@
             "description": "Fetch records from a DynamoDB table in the table browser",
             "metadata": [
                 {
+                    "type": "count",
+                    "required": false
+                },
+                {
                     "type": "dynamoDbFetchType"
                 },
                 {
@@ -4391,11 +4917,36 @@
             ]
         },
         {
+            "name": "dynamodb_fetchTables",
+            "description": "Fetches the tables in a DynamoDB entity",
+            "metadata": [
+                {
+                    "type": "count",
+                    "required": false
+                },
+                {
+                    "type": "result"
+                },
+                {
+                    "type": "source",
+                    "required": false
+                }
+            ]
+        },
+        {
             "name": "dynamodb_openTable",
             "description": "Open a DynamoDB table in the table browser",
             "metadata": [
                 {
+                    "type": "count",
+                    "required": false
+                },
+                {
                     "type": "result"
+                },
+                {
+                    "type": "source",
+                    "required": false
                 }
             ]
         },
@@ -4973,7 +5524,7 @@
         },
         {
             "name": "file_editAwsFile",
-            "description": "Use authoring features such as autocompletion, syntax checking, and highlighting, for AWS filetypes (CFN, SAM, etc.). Emit this _once_ per file-editing session for a given file. Ideally this is emitted only if authoring features are used, rather than merely opening or touching a file.",
+            "description": "Use authoring features such as autocompletion, syntax checking, and highlighting, for AWS filetypes (CFN, SAM, etc.). Emit this _once_ per file-editing session for a given file. For generic code files see `ide_editCodeFile`.",
             "metadata": [
                 {
                     "type": "awsFiletype",
@@ -5078,6 +5629,17 @@
             "metadata": [
                 {
                     "type": "result"
+                }
+            ]
+        },
+        {
+            "name": "ide_editCodeFile",
+            "description": "User opened a code file with the given file extension. Client should DEDUPLICATE this metric (ideally hourly/daily). AWS-specific files should (also) emit `file_editAwsFile`.",
+            "passive": true,
+            "metadata": [
+                {
+                    "type": "filenameExt",
+                    "required": false
                 }
             ]
         },
@@ -5199,7 +5761,8 @@
             "description": "Jump to a lambda handler from elsewhere",
             "metadata": [
                 {
-                    "type": "result"
+                    "type": "source",
+                    "required": false
                 }
             ]
         },
@@ -5238,6 +5801,10 @@
                     "required": false
                 },
                 {
+                    "type": "source",
+                    "required": false
+                },
+                {
                     "type": "version",
                     "required": false
                 }
@@ -5252,6 +5819,10 @@
                 },
                 {
                     "type": "runtime",
+                    "required": false
+                },
+                {
+                    "type": "source",
                     "required": false
                 }
             ]
@@ -5616,11 +6187,33 @@
             ]
         },
         {
+            "name": "sam_build",
+            "description": "Called when building a SAM application",
+            "metadata": [
+                {
+                    "type": "lambdaPackageType",
+                    "required": false
+                },
+                {
+                    "type": "source",
+                    "required": false
+                },
+                {
+                    "type": "version",
+                    "required": false
+                }
+            ]
+        },
+        {
             "name": "sam_deploy",
             "description": "Called when deploying a SAM application",
             "metadata": [
                 {
                     "type": "result"
+                },
+                {
+                    "type": "source",
+                    "required": false
                 },
                 {
                     "type": "version",
@@ -5697,6 +6290,10 @@
                 },
                 {
                     "type": "result"
+                },
+                {
+                    "type": "source",
+                    "required": false
                 },
                 {
                     "type": "syncedResources"
@@ -5921,6 +6518,102 @@
             ]
         },
         {
+            "name": "threatComposer_closed",
+            "description": "Called after closing a threat composer file",
+            "metadata": [
+                {
+                    "type": "id",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "threatComposer_created",
+            "description": "Called after a new threat composer file is created using command pallet or New File option",
+            "metadata": [
+                {
+                    "type": "id",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "threatComposer_error",
+            "description": "Called after an error is thrown from the threat composer view",
+            "metadata": [
+                {
+                    "type": "id",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "threatComposer_fileSaved",
+            "description": "Called after a threat composer file has been saved",
+            "metadata": [
+                {
+                    "type": "id",
+                    "required": true
+                },
+                {
+                    "type": "saveType",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "threatComposer_opened",
+            "description": "Called after opening a threat composer file",
+            "metadata": [
+                {
+                    "type": "id",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "toolkit_closeModule",
+            "description": "The user closed 'something' (specified by 'module'). Examples: a view, feature, resource, ...",
+            "metadata": [
+                {
+                    "type": "module",
+                    "required": true
+                }
+            ],
+            "passive": true
+        },
+        {
+            "name": "toolkit_featureState",
+            "description": "Represents the current enabled state of a feature. Used to track user journey through a feature. Emitted after feature-specific operations of interest in the Toolkit.",
+            "metadata": [
+                {
+                    "type": "authStatus",
+                    "required": false
+                },
+                {
+                    "type": "credentialSourceId",
+                    "required": false
+                },
+                {
+                    "type": "credentialType",
+                    "required": false
+                },
+                {
+                    "type": "enabled",
+                    "required": true
+                },
+                {
+                    "type": "featureId",
+                    "required": true
+                },
+                {
+                    "type": "source",
+                    "required": true
+                }
+            ],
+            "passive": true
+        },
+        {
             "name": "toolkit_getExternalResource",
             "description": "The toolkit tried to retrieve blob data from a url",
             "metadata": [
@@ -5955,9 +6648,40 @@
             "passive": true
         },
         {
-            "name": "toolkit_invokeAction",
-            "description": "A user invoked an action. Source represents the notification that produced the action",
+            "name": "toolkit_initModule",
+            "description": "The Toolkit has completed initialization for the specified module.",
             "metadata": [
+                {
+                    "type": "attempts",
+                    "required": false
+                },
+                {
+                    "type": "duration",
+                    "required": false
+                },
+                {
+                    "type": "module",
+                    "required": true
+                },
+                {
+                    "type": "result",
+                    "required": true
+                },
+                {
+                    "type": "version",
+                    "required": false
+                }
+            ],
+            "passive": true
+        },
+        {
+            "name": "toolkit_invokeAction",
+            "description": "User invoked an action. `source` is the notification that produced the action",
+            "metadata": [
+                {
+                    "type": "action",
+                    "required": true
+                },
                 {
                     "type": "component",
                     "required": true
@@ -5979,6 +6703,25 @@
                     "required": true
                 }
             ]
+        },
+        {
+            "name": "toolkit_openModule",
+            "description": "The user opened 'something' (specified by 'module'). Examples: a view, feature, resource, ...",
+            "metadata": [
+                {
+                    "type": "module",
+                    "required": true
+                },
+                {
+                    "type": "result",
+                    "required": true
+                },
+                {
+                    "type": "source",
+                    "required": true
+                }
+            ],
+            "passive": true
         },
         {
             "name": "toolkit_showAction",

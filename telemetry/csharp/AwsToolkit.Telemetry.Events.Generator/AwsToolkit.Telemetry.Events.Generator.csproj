@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Amazon.AwsToolkit.Telemetry.Events.Generator</RootNamespace>
     <AssemblyName>Amazon.AwsToolkit.Telemetry.Events.Generator</AssemblyName>
     <Authors>Amazon Web Services</Authors>
@@ -23,12 +23,14 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Definitions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AwsToolkit.Telemetry.Events.Generator.Core\AwsToolkit.Telemetry.Events.Generator.Core.csproj" />
   </ItemGroup>
 
 </Project>

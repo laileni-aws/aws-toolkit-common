@@ -122,6 +122,10 @@ function getTypeOrThrow(types: MetadataType[] = [], name: string) {
 
 const baseName = 'MetricBase'
 
+/**
+ * Fields set automatically by the telemetry client (thus application code
+ * normally shouldn't set these because the value will be overridden).
+ */
 const commonMetadata = [
   'awsAccount',
   'awsRegion',
@@ -132,7 +136,13 @@ const commonMetadata = [
   'requestId',
   'requestServiceType',
   'result',
-]
+] as const
+
+/** 
+ * These fields will also be set by the telemetry client, but the caller might
+ * know better, so they won't be overridden if specified in `.record()` calls.
+ */
+const optionalMetadata: typeof commonMetadata[number][] = ['awsRegion']
 
 const passive: PropertySignatureStructure = {
     isReadonly: true,
@@ -140,6 +150,15 @@ const passive: PropertySignatureStructure = {
     name: 'passive',
     type: 'boolean',
     docs: ['A flag indicating that the metric was not caused by the user.'],
+    kind: StructureKind.PropertySignature,
+}
+
+const trackPerformance: PropertySignatureStructure = {
+    isReadonly: true,
+    hasQuestionToken: true,
+    name: 'trackPerformance',
+    type: 'boolean',
+    docs: ['A flag indicating that the metric should track run-time performance information'],
     kind: StructureKind.PropertySignature,
 }
 
@@ -168,6 +187,11 @@ const runtimeMetricDefinition: InterfaceDeclarationStructure = {
             isReadonly: true,
         },
         {
+            name: 'trackPerformance',
+            type: 'boolean',
+            isReadonly: true,
+        },
+        {
             name: 'requiredMetadata',
             type: 'readonly string[]',
             isReadonly: true,
@@ -183,7 +207,7 @@ const header = `
 `.trimStart()
 
 function getMetricMetadata(metric: Metric) {
-    return metric.metadata?.filter(m => !commonMetadata.includes(m.type)) ?? []
+    return metric.metadata?.filter(m => !commonMetadata.includes(m.type as typeof commonMetadata[number])) ?? []
 }
 
 function generateMetadataProperty(metadata: MetricMetadataType): PropertySignatureStructure {
@@ -204,7 +228,7 @@ function generateMetricBase(types: MetadataType[] | undefined): InterfaceDeclara
         name: baseName,
         isExported: true,
         kind: StructureKind.Interface,
-        properties: commonMetadata.map(toProp).concat(passive, value),
+        properties: commonMetadata.map(toProp).concat(passive, value, trackPerformance),
     }    
 }
 
@@ -315,7 +339,7 @@ function generateDefinitions(metrics: Metric[]): VariableStatementStructure {
         const metadataTypes = getMetricMetadata(m).filter(m => m.required ?? true).map(m => `'${m.type}'`)
         const requiredMetadata = `[${metadataTypes.join(', ')}]`
         
-        return `${m.name}: { unit: '${m.unit ?? 'None'}', passive: ${m.passive ?? false}, requiredMetadata: ${requiredMetadata} }`
+        return `${m.name}: { unit: '${m.unit ?? 'None'}', passive: ${m.passive ?? false}, trackPerformance: ${m.trackPerformance ?? false}, requiredMetadata: ${requiredMetadata} }`
     })
 
     return {
@@ -351,7 +375,7 @@ function generateFile(telemetryJson: MetricDefinitionRoot, dest: string) {
         isExported: true,
         name: 'Metadata',
         typeParameters: [`T extends ${baseName}`],
-        type: `Partial<Omit<T, keyof ${baseName}>>`,
+        type: `Partial<Omit<T, keyof ${baseName}> | Partial<Pick<${baseName}, ${optionalMetadata.map(v => `'${v}'`).join(' | ')}>>>`,
         kind: StructureKind.TypeAlias,
     }
 
